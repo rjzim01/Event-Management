@@ -128,9 +128,15 @@ unset($_SESSION['email']);
         <div class="d-grid">
           <button type="submit" class="btn btn-primary">Login</button>
         </div>
-        <div class="text-center mt-3">
+
+        <!-- <div class="text-center mt-3">
           <a href="forgot_password.php" class="link-primary">Forgot Password?</a>
+        </div> -->
+
+        <div class="text-center mt-3">
+        <p>Not Registered Yet? <a href="register.php" class="link-primary">Register</a></p>    
         </div>
+
       </form>
     </div>
 

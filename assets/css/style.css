@@ -1,0 +1,13 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.content {
+    flex: 1; /* Pushes the footer to the bottom */
+}
