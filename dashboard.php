@@ -24,6 +24,15 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'User';
   <body>
 
     <div class="container">
+        
+        <?php if (isset($_SESSION['flash_message'])): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?= htmlspecialchars($_SESSION['flash_message']); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php unset($_SESSION['flash_message']); ?>
+        <?php endif; ?>
+
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
             <div class="container-fluid">
@@ -51,12 +60,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'User';
                         </li>
                         <?php endif; ?>
                     </ul>
-                    <!-- <form class="d-flex">
-                        <button class="btn btn-outline-primary me-2" type="button">Profile</button>
-                        <form action="logout.php" method="POST" style="display: inline;">
-                            <button type="submit" class="btn btn-danger">Logout</button>
-                        </form>
-                    </form> -->
+                    
                     <div class="d-flex">
                         <button class="btn btn-outline-primary me-2" type="button" onclick="window.location.href='profile.php';">
                             Profile

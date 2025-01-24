@@ -38,6 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Successful login
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
+            
+            // Set a flash message
+            $_SESSION['flash_message'] = "Login successful";
+
             header('Location: dashboard.php'); // Redirect to dashboard
             exit;
         } else {
@@ -103,6 +107,15 @@ unset($_SESSION['email']);
         </div>
       <?php endif; ?>
 
+      
+      <?php if (isset($_SESSION['flash_message'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($_SESSION['flash_message']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['flash_message']); ?>
+      <?php endif; ?>
+
       <form method="POST" action="login.php">
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
@@ -122,5 +135,7 @@ unset($_SESSION['email']);
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   </body>
 </html>
