@@ -2,10 +2,10 @@
 session_start();
 require 'db.php';
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header('Location: login.php');
-    exit;
-}
+// if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+//     header('Location: login.php');
+//     exit;
+// }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
@@ -53,11 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="start_date" class="form-label">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                    <input type="datetime-local" id="start_date" name="start_date" class="form-control" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="end_date" class="form-label">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                    <input type="datetime-local" id="end_date" name="end_date" class="form-control" required>
                                 </div>
                             </div>
                             <div class="mb-3">
