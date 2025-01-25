@@ -2,6 +2,10 @@
 // Start the session
 session_start();
 
+// echo '<pre>';
+// print_r($_SESSION);
+// echo '</pre>';
+
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     // If not logged in, redirect to login page
@@ -11,6 +15,16 @@ if (!isset($_SESSION['user_id'])) {
 
 // Check the user's role (assuming role is stored in session)
 $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'User';
+
+
+require 'db.php';
+
+// Fetch the logged-in user's details from the database
+$stmtUser = $pdo->prepare("SELECT name, email FROM users WHERE id = :user_id");
+$stmtUser->execute(['user_id' => $_SESSION['user_id']]);
+$user = $stmtUser->fetch(PDO::FETCH_ASSOC);
+
+
 ?>
 
 <!doctype html>
@@ -44,7 +58,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'User';
         <!-- Header -->
         <header class="bg-light shadow-sm text-black text-center mb-4 py-2">
             <h1 class="display-5 fw-bold">Welcome to the Event Management System!</h1>
-            <p class="lead">Hello, <strong><?php echo htmlspecialchars($role); ?></strong>! Manage your events efficiently.</p>
+            <p class="lead">Hello, <strong><?= htmlspecialchars($user['name']) ?></strong>! Manage your events efficiently.</p>
         </header>
 
         <!-- Main Content -->

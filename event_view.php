@@ -78,6 +78,14 @@ $events = $stmt->fetchAll();
 
     <div class="content container">
 
+        <?php if (isset($_SESSION['flash_message'])): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?= htmlspecialchars($_SESSION['flash_message']); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php unset($_SESSION['flash_message']); ?>
+        <?php endif; ?>
+
         <!-- Navbar -->
         <?php include 'templates/navbar.php'; ?>
 
@@ -131,16 +139,41 @@ $events = $stmt->fetchAll();
 
                                 <div class="card-footer text-start">
                                     <?php if (isset($_SESSION['user_id'])): ?>
+                                        
                                         <?php
                                         // Check if the user is already registered for this event
                                         $stmt = $pdo->prepare("SELECT COUNT(*) FROM attendees WHERE event_id = ? AND email = ?");
                                         $stmt->execute([$event['id'], $user['email']]);
                                         $isRegistered = $stmt->fetchColumn() > 0;
+
+                                        // Check if the current time is before the event start time
+                                        $currentTime = new DateTime();
+                                        $eventStartTime = new DateTime($event['start_date']);
+                                        $isRegistrationOpen = $currentTime < $eventStartTime;
+
+                                        // Check if the logged-in user is the creator of the event
+                                        $isCreator = ($_SESSION['user_id'] == $event['created_by']);
                                         ?>
 
-                                        <?php if ($isRegistered): ?>
+                                        <?php if ($isCreator): ?>
+                                            <!-- Show a message for the event creator -->
+                                            <!-- <p class="text-info">You are the creator of this event</p> -->
+                                            <a href="event_edit.php?event_id=<?= $event['id'] ?>" class="btn btn-warning">Edit Event</a>
+
+                                            <!-- Delete Event Option -->
+                                            <form method="POST" action="event_delete.php" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                                <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
+                                                <button type="submit" class="btn btn-danger">Delete Event</button>
+                                            </form>
+
+                                        <?php elseif ($isRegistered): ?>
+                                            <!-- Show if the user is already registered -->
                                             <p class="text-success">Registration complete</p>
+                                        <?php elseif (!$isRegistrationOpen): ?>
+                                            <!-- Show if registration is closed -->
+                                            <p class="text-danger">Registration closed</p>
                                         <?php else: ?>
+                                            <!-- Show registration button for eligible users -->
                                             <form method="POST" action="attendee_register.php" class="d-inline">
                                                 <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
                                                 <input type="hidden" name="user_name" value="<?= htmlspecialchars($user['name']) ?>">
@@ -149,9 +182,11 @@ $events = $stmt->fetchAll();
                                             </form>
                                         <?php endif; ?>
                                     <?php else: ?>
+                                        <!-- Message for guests (not logged in) -->
                                         <p class="text-danger">You must be logged in to register for the event.</p>
                                     <?php endif; ?>
                                 </div>
+
 
                             </div>
                         </div>
