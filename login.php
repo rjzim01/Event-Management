@@ -134,7 +134,7 @@ unset($_SESSION['email']);
         </div> -->
 
         <div class="text-center mt-3">
-        <p>Not Registered Yet? <a href="register.php" class="link-primary">Register</a></p>    
+        <p>Not Registered Yet?a <a href="register.php" class="link-primary">Register</a></p>    
         </div>
 
       </form>
