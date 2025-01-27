@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 21, 2025 at 05:42 PM
+-- Generation Time: Jan 27, 2025 at 02:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,6 +35,16 @@ CREATE TABLE `attendees` (
   `registered_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `attendees`
+--
+
+INSERT INTO `attendees` (`id`, `event_id`, `name`, `email`, `registered_at`) VALUES
+(3, 2, 'User 1', 'user1@gmail.com', '2025-01-25 02:17:02'),
+(4, 5, 'User 2', 'user2@gmail.com', '2025-01-25 11:12:19'),
+(5, 6, 'User 1', 'user1@gmail.com', '2025-01-25 11:55:29'),
+(7, 5, 'User 4', 'user4@gmail.com', '2025-01-25 12:13:11');
+
 -- --------------------------------------------------------
 
 --
@@ -45,8 +55,8 @@ CREATE TABLE `events` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
   `location` varchar(255) DEFAULT NULL,
   `max_capacity` int(11) NOT NULL,
   `created_by` int(11) NOT NULL,
@@ -58,8 +68,10 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `name`, `description`, `start_date`, `end_date`, `location`, `max_capacity`, `created_by`, `created_at`) VALUES
-(1, 'First Event', 'This is the first Event.', '2025-01-21', '2025-01-21', 'Manikgonj', 1000, 2, '2025-01-21 15:23:28'),
-(2, 'Second Event', 'This is second event', '2025-01-21', '2025-01-21', 'Mirpur', 200, 2, '2025-01-21 16:00:40');
+(2, 'Second Event', 'This is second event', '2025-01-21 00:00:00', '2025-01-21 00:00:00', 'Mirpur', 200, 2, '2025-01-21 16:00:40'),
+(5, 'Event 3', 'Event 333', '2025-01-26 09:00:00', '2025-01-25 18:00:00', 'Manikgonj', 50, 1, '2025-01-25 01:14:07'),
+(6, 'Event 5', 'Event 5', '2025-01-26 09:00:00', '2025-01-27 17:00:00', 'Manikgonj', 1, 2, '2025-01-25 11:54:34'),
+(7, 'Event 6', 'Event 6', '2025-01-26 09:00:00', '2025-01-30 21:00:00', 'Manikgonj', 1, 2, '2025-01-25 12:33:25');
 
 -- --------------------------------------------------------
 
@@ -82,7 +94,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `created_at`) VALUES
 (1, 'User 1', 'user1@gmail.com', '$2y$10$48ehnqpaHdhZQIJiRLmIkuXPwDfzve7Jm2Zja9RpvlPLry7MUiR2u', 'user', '2025-01-21 15:05:01'),
-(2, 'User 2', 'user2@gmail.com', '$2y$10$48ehnqpaHdhZQIJiRLmIkuXPwDfzve7Jm2Zja9RpvlPLry7MUiR2u', 'admin', '2025-01-21 15:05:01');
+(2, 'User 2', 'user2@gmail.com', '$2y$10$48ehnqpaHdhZQIJiRLmIkuXPwDfzve7Jm2Zja9RpvlPLry7MUiR2u', 'admin', '2025-01-21 15:05:01'),
+(3, 'User 4', 'user4@gmail.com', '$2y$10$5jdqhDcHzT4u3P8sFX3H6u1QkThtAaoxKrhE58AGeVeEznxm7mgAq', 'user', '2025-01-21 19:57:33');
 
 --
 -- Indexes for dumped tables
@@ -117,19 +130,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `attendees`
 --
 ALTER TABLE `attendees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

@@ -2,17 +2,11 @@
 // Start session
 session_start();
 
-// echo '<pre>';
-// print_r($_SESSION);
-// echo '</pre>';
-
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    // Redirect to login page if not logged in
     header('Location: login.php');
-    exit; // Make sure no code is executed after the redirect
+    exit;
 }
-
 
 // Check the user's role (assuming role is stored in session)
 $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'User';
@@ -28,19 +22,17 @@ if (!$user) {
     die('User details not found.');
 }
 
-// // Fetch all events from the database
-// $stmt = $pdo->prepare("SELECT * FROM events ORDER BY start_date DESC");
-// $stmt->execute();
-// $events = $stmt->fetchAll();
-
-// Set the number of events to display per page
 $eventsPerPage = 3;
-
-// Get the current page number from the query parameter (default to 1)
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
-
-// Calculate the offset
 $offset = ($page - 1) * $eventsPerPage;
+
+// Sorting setup
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'start_date';
+$order = isset($_GET['order']) && $_GET['order'] === 'asc' ? 'ASC' : 'DESC';
+$allowedSortColumns = ['name', 'start_date', 'location', 'seats_left'];
+if (!in_array($sort, $allowedSortColumns)) {
+    $sort = 'start_date';
+}
 
 // Fetch all events with creator's name from the database
 $stmt = $pdo->prepare("
@@ -60,7 +52,7 @@ $stmt = $pdo->prepare("
     GROUP BY 
         events.id
     ORDER BY 
-        events.start_date DESC
+        $sort $order
     LIMIT :limit OFFSET :offset
 ");
 $stmt->bindValue(':limit', $eventsPerPage, PDO::PARAM_INT);
@@ -111,7 +103,24 @@ $totalPages = ceil($totalEvents / $eventsPerPage);
             <h1>Upcoming Events</h1>
         </header>
 
-        <main class="container my-4">
+        <main class="container my-3">
+
+            <div style="padding: 10px; border-radius: 5px; margin-bottom: 10px;" class="bg-light shadow-sm text-black">
+                <!-- Sorting -->
+                <form method="GET" class="d-inline-block">
+                    <label for="sort" class="me-2">Sort by:</label>
+                    <select name="sort" id="sort" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+                        <option value="start_date" <?= $sort === 'start_date' ? 'selected' : '' ?>>Start Date</option>
+                        <option value="name" <?= $sort === 'name' ? 'selected' : '' ?>>Name</option>
+                        <option value="location" <?= $sort === 'location' ? 'selected' : '' ?>>Location</option>
+                        <option value="seats_left" <?= $sort === 'seats_left' ? 'selected' : '' ?>>Seats Left</option>
+                    </select>
+                    <input type="hidden" name="order" value="<?= $order === 'ASC' ? 'desc' : 'asc' ?>">
+                </form>
+            </div>
+
+            <!-- <hr> -->
+
             <?php if (count($events) > 0): ?>
                 <div class="row g-4">
                     <?php foreach ($events as $event): ?>
@@ -123,6 +132,11 @@ $totalPages = ceil($totalEvents / $eventsPerPage);
                                             <?= htmlspecialchars($event['name']) ?>
                                         </a>
                                     </h5>
+                                    <p><strong>Location:</strong> <?= htmlspecialchars($event['location']) ?></p>
+                                    <p><strong>Start Time:</strong> <?= date('h:i A, F j, Y', strtotime($event['start_date'])) ?></p>
+                                    <p><strong>Seats Left:</strong> 
+                                        <?= max(0, $event['total_seats'] - $event['reserved_seats']) ?> / <?= $event['total_seats'] ?>
+                                    </p>
 
                                     <hr>
 
@@ -252,9 +266,6 @@ $totalPages = ceil($totalEvents / $eventsPerPage);
 
     <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
 
 </body>
 
