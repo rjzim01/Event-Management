@@ -33,6 +33,15 @@ if (!$user) {
 // $stmt->execute();
 // $events = $stmt->fetchAll();
 
+// Set the number of events to display per page
+$eventsPerPage = 3;
+
+// Get the current page number from the query parameter (default to 1)
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Calculate the offset
+$offset = ($page - 1) * $eventsPerPage;
+
 // Fetch all events with creator's name from the database
 $stmt = $pdo->prepare("
     SELECT 
@@ -51,11 +60,20 @@ $stmt = $pdo->prepare("
     GROUP BY 
         events.id
     ORDER BY 
-        events.start_date DESC;
-
+        events.start_date DESC
+    LIMIT :limit OFFSET :offset
 ");
+$stmt->bindValue(':limit', $eventsPerPage, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $events = $stmt->fetchAll();
+
+// Get the total number of events
+$totalEventsStmt = $pdo->query("SELECT COUNT(*) FROM events");
+$totalEvents = $totalEventsStmt->fetchColumn();
+
+// Calculate total pages
+$totalPages = ceil($totalEvents / $eventsPerPage);
 
 ?>
 
@@ -115,8 +133,6 @@ $events = $stmt->fetchAll();
 
                                     <p class="card-text"><strong>Location:</strong> <?= htmlspecialchars($event['location']) ?></p>
                                     <p class="card-text"><strong>Start Time:</strong> <?= date('h:i A, F j, Y', strtotime($event['start_date'])) ?></p>
-
-                                    <p class="card-text"><strong>Description:</strong> <?= nl2br(htmlspecialchars($event['description'])) ?></p>
 
                                     <p class="card-text">
                                         <strong>Seats Left:</strong> 
@@ -192,6 +208,36 @@ $events = $stmt->fetchAll();
                         </div>
                     <?php endforeach; ?>
                 </div>
+
+                <hr>
+                
+                <!-- Pagination Controls -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-end">
+                        <?php if ($page > 1): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?= $page - 1 ?>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <li class="page-item <?= $i === $page ? 'active' : '' ?>">
+                                <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <?php if ($page < $totalPages): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?= $page + 1 ?>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
+
             <?php else: ?>
                 <div class="alert alert-info text-center">
                     <p>No upcoming events found.</p>

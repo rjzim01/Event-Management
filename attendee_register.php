@@ -32,6 +32,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // Check if the event has a seat limit and if it's reached
+    $seatLimitStmt = $pdo->prepare("SELECT max_capacity, (SELECT COUNT(*) FROM attendees WHERE event_id = ?) AS current_attendees FROM events WHERE id = ?");
+    $seatLimitStmt->execute([$event_id, $event_id]);
+    $seatInfo = $seatLimitStmt->fetch();
+
+    if ($seatInfo) {
+        $seatLimit = $seatInfo['max_capacity'];
+        $currentAttendees = $seatInfo['current_attendees'];
+
+        // Check if the seat limit is reached
+        if ($currentAttendees >= $seatLimit) {
+            echo '<script>alert("The seat limit for this event has been reached. Registration is closed."); window.location.href="event_view.php";</script>';
+            exit;
+        }
+    } else {
+        echo '<script>alert("Event not found."); window.location.href="event_view.php";</script>';
+        exit;
+    }
+
     // Check if the user is already registered for the event
     $checkStmt = $pdo->prepare("SELECT * FROM attendees WHERE event_id = ? AND email = ?");
     $checkStmt->execute([$event_id, $email]);
@@ -54,3 +73,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: event_view.php');
     exit;
 }
+?>
