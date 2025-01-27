@@ -134,19 +134,10 @@ $totalPages = ceil($totalEvents / $eventsPerPage);
                                     </h5>
                                     <p><strong>Location:</strong> <?= htmlspecialchars($event['location']) ?></p>
                                     <p><strong>Start Time:</strong> <?= date('h:i A, F j, Y', strtotime($event['start_date'])) ?></p>
-                                    <p><strong>Seats Left:</strong> 
-                                        <?= max(0, $event['total_seats'] - $event['reserved_seats']) ?> / <?= $event['total_seats'] ?>
-                                    </p>
-
-                                    <hr>
-
                                     <p class="card-text">
                                         <strong>Organized By:</strong> 
                                         <?= ($_SESSION['user_id'] == $event['created_by']) ? htmlspecialchars($event['creator_name']).' ( Yourself )' : htmlspecialchars($event['creator_name'] ?? 'Unknown') ?>
                                     </p>
-
-                                    <p class="card-text"><strong>Location:</strong> <?= htmlspecialchars($event['location']) ?></p>
-                                    <p class="card-text"><strong>Start Time:</strong> <?= date('h:i A, F j, Y', strtotime($event['start_date'])) ?></p>
 
                                     <p class="card-text">
                                         <strong>Seats Left:</strong> 
@@ -161,7 +152,6 @@ $totalPages = ceil($totalEvents / $eventsPerPage);
                                             // Display 'Sold Out' if no seats are left
                                             echo 'Sold Out';
                                         }
-
                                         ?>
                                     </p>
 
