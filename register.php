@@ -54,7 +54,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
-          <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+          <div class="input-group">
+            <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+              👁️
+            </button>
+          </div>
         </div>
         <div class="d-grid">
           <button type="submit" class="btn btn-primary">Register</button>
@@ -64,6 +69,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
       </form>
     </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const emailInput = document.getElementById("email");
+
+        emailInput.addEventListener("input", function() {
+          if (emailInput.checkValidity()) {
+            emailInput.classList.remove("is-invalid");
+            emailInput.classList.add("is-valid");
+          } else {
+            emailInput.classList.remove("is-valid");
+            emailInput.classList.add("is-invalid");
+          }
+        });
+
+        const passwordInput = document.getElementById("password");
+
+        passwordInput.addEventListener("input", function() {
+          if (passwordInput.value.length >= 8) {
+            passwordInput.classList.remove("is-invalid");
+            passwordInput.classList.add("is-valid");
+          } else {
+            passwordInput.classList.remove("is-valid");
+            passwordInput.classList.add("is-invalid");
+          }
+        });
+
+        const togglePassword = document.getElementById("togglePassword");
+
+        togglePassword.addEventListener("click", function () {
+          if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            togglePassword.innerHTML = "🙈"; // Change icon to hide
+          } else {
+            passwordInput.type = "password";
+            togglePassword.innerHTML = "👁️"; // Change icon to show
+          }
+        });
+
+      });
+    </script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
