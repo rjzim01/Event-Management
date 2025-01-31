@@ -24,6 +24,9 @@ if (!$event) {
     die("Event not found.");
 }
 
+// Sanitize event name to make it safe for use in a filename
+$eventName = preg_replace('/[^A-Za-z0-9\-_]/', '_', $event['name']);
+
 // Fetch attendee list
 $stmt = $pdo->prepare("SELECT name, email, registered_at FROM attendees WHERE event_id = ?");
 $stmt->execute([$event_id]);
@@ -32,7 +35,8 @@ $attendees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Set headers for CSV download
 header('Content-Type: text/csv');
-header('Content-Disposition: attachment; filename="attendees_' . $event_id . '.csv"');
+//header('Content-Disposition: attachment; filename="attendees_' . $event_id . '.csv"');
+header('Content-Disposition: attachment; filename="attendees_' . $event_id . '_' . $eventName . '.csv"');
 
 // Open file pointer to output stream
 $output = fopen('php://output', 'w');
