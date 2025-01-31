@@ -8,6 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
     $stmt->execute([$name, $email, $password]);
+
+    session_start();
+
+    // Set a flash message
+    $_SESSION['flash_message'] = "Register Successful";
     
     header('Location: login.php');
     exit;
