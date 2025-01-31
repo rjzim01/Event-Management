@@ -57,15 +57,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <label for="email" class="form-label">Email</label>
           <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
         </div>
+
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
           <div class="input-group">
-            <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
-            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-              👁️
-            </button>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Enter a strong password" required>
+            <button class="btn btn-outline-secondary" type="button" id="togglePassword">👁️</button>
           </div>
+          <div class="invalid-feedback">Password must be at least 9 characters, including an uppercase letter, a lowercase letter, a number, and a special character.</div>
         </div>
+
+
         <div class="d-grid">
           <button type="submit" class="btn btn-primary">Register</button>
         </div>
@@ -77,22 +79,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script>
       document.addEventListener("DOMContentLoaded", function() {
+
+        const form = document.querySelector("form");
+        const nameInput = document.getElementById("name");
         const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const togglePassword = document.getElementById("togglePassword");
 
         emailInput.addEventListener("input", function() {
-          if (emailInput.checkValidity()) {
+
+          const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+          if (emailPattern.test(emailInput.value)) {
             emailInput.classList.remove("is-invalid");
             emailInput.classList.add("is-valid");
           } else {
             emailInput.classList.remove("is-valid");
             emailInput.classList.add("is-invalid");
           }
+
         });
 
-        const passwordInput = document.getElementById("password");
+        // Strong password validation
+        passwordInput.addEventListener("input", function () {
+          const password = passwordInput.value;
+          const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/;
 
-        passwordInput.addEventListener("input", function() {
-          if (passwordInput.value.length >= 8) {
+          if (strongPasswordRegex.test(password)) {
             passwordInput.classList.remove("is-invalid");
             passwordInput.classList.add("is-valid");
           } else {
@@ -101,8 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           }
         });
 
-        const togglePassword = document.getElementById("togglePassword");
-
         togglePassword.addEventListener("click", function () {
           if (passwordInput.type === "password") {
             passwordInput.type = "text";
@@ -110,6 +121,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           } else {
             passwordInput.type = "password";
             togglePassword.innerHTML = "👁️"; // Change icon to show
+          }
+        });
+
+        // Prevent form submission if validation fails
+        form.addEventListener("submit", function (event) {
+          let isValid = true;
+
+          // Check if name is not empty
+          if (nameInput.value.trim() === "") {
+            nameInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            nameInput.classList.remove("is-invalid");
+            nameInput.classList.add("is-valid");
+          }
+
+          // Check if email is valid
+          if (!emailInput.checkValidity()) {
+            emailInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            emailInput.classList.remove("is-invalid");
+            emailInput.classList.add("is-valid");
+          }
+
+          // Check if password is strong
+          const password = passwordInput.value;
+          const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{9,}$/;
+          if (!strongPasswordRegex.test(password)) {
+            passwordInput.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            passwordInput.classList.remove("is-invalid");
+            passwordInput.classList.add("is-valid");
+          }
+
+          // If any field is invalid, prevent form submission
+          if (!isValid) {
+            event.preventDefault();
           }
         });
 
