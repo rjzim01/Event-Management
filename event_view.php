@@ -200,6 +200,12 @@ $totalPages = ceil($totalEvents / $eventsPerPage);
                                                 <button type="submit" class="btn btn-primary">Register for Event</button>
                                             </form>
                                         <?php endif; ?>
+
+                                        <!-- Admin's Download CSV Button -->
+                                        <?php if ($_SESSION['role'] === 'admin'): ?>
+                                            <a href="download_report.php?event_id=<?= $event['id'] ?>" class="btn btn-success">Download CSV</a>
+                                        <?php endif; ?>
+                                        
                                     <?php else: ?>
                                         <!-- Message for guests (not logged in) -->
                                         <p class="text-danger">You must be logged in to register for the event.</p>

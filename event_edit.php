@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="number" class="form-control" id="max_capacity" name="max_capacity" value="<?= htmlspecialchars($event['max_capacity']) ?>" required>
                 </div>
                 <button type="submit" class="btn btn-success">Update Event</button>
-                <a href="view_events.php" class="btn btn-secondary">Cancel</a>
+                <a href="event_view.php" class="btn btn-secondary">Cancel</a>
             </form>
         </main>
 
