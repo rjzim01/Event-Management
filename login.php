@@ -106,7 +106,6 @@ unset($_SESSION['email']);
           </ul>
         </div>
       <?php endif; ?>
-
       
       <?php if (isset($_SESSION['flash_message'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -129,12 +128,8 @@ unset($_SESSION['email']);
           <button type="submit" class="btn btn-primary">Login</button>
         </div>
 
-        <!-- <div class="text-center mt-3">
-          <a href="forgot_password.php" class="link-primary">Forgot Password?</a>
-        </div> -->
-
         <div class="text-center mt-3">
-        <p>Not Registered Yet? <a href="register.php" class="link-primary">Register</a></p>    
+          <p>Not Registered Yet? <a href="register.php" class="link-primary">Register</a></p>    
         </div>
 
       </form>

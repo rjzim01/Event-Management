@@ -80,8 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </header>
 
         <main class="container my-4 border p-4">
-
-
             <form method="POST" action="">
                 <div class="mb-3">
                     <label for="name" class="form-label">Event Name</label>

@@ -177,7 +177,6 @@ $totalPages = ceil($totalEvents / $eventsPerPage);
 
                                         <?php if ($isCreator): ?>
                                             <!-- Show a message for the event creator -->
-                                            <!-- <p class="text-info">You are the creator of this event</p> -->
                                             <a href="event_edit.php?event_id=<?= $event['id'] ?>" class="btn btn-warning">Edit Event</a>
 
                                             <!-- Delete Event Option -->

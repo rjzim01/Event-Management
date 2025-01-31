@@ -1,10 +1,6 @@
 <?php
-// Start the session
-session_start();
 
-// echo '<pre>';
-// print_r($_SESSION);
-// echo '</pre>';
+session_start(); // Start the session
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -16,14 +12,12 @@ if (!isset($_SESSION['user_id'])) {
 // Check the user's role (assuming role is stored in session)
 $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'User';
 
-
 require 'db.php';
 
 // Fetch the logged-in user's details from the database
 $stmtUser = $pdo->prepare("SELECT name, email FROM users WHERE id = :user_id");
 $stmtUser->execute(['user_id' => $_SESSION['user_id']]);
 $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
-
 
 ?>
 

@@ -12,7 +12,6 @@ if (!isset($_SESSION['user_id'])) {
 // Fetch user details from the session
 $user_id = $_SESSION['user_id'];
 $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'User';
-// $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
 require 'db.php';
 
@@ -25,8 +24,6 @@ $username = $user['name'];
 // Handle profile update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Simulate profile update (in a real case, you'd save the changes to the database)
-    //$_SESSION['username'] = $_POST['username'];
-
     $name = $_POST['name'];
 
     // Validate the name (add more validations as needed)
