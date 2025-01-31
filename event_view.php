@@ -128,7 +128,7 @@ $totalPages = ceil($totalEvents / $eventsPerPage);
                             <div class="card h-100">
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        <a href="event_view.php?event_id=<?= $event['id'] ?>" class="text-decoration-none">
+                                        <a href="api.php?id=<?= $event['id'] ?>" class="text-decoration-none">
                                             <?= htmlspecialchars($event['name']) ?>
                                         </a>
                                     </h5>
