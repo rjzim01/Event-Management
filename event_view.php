@@ -216,10 +216,11 @@ $totalPages = ceil($totalEvents / $eventsPerPage);
                                             <p class="text-danger">Registration closed</p>
                                         <?php else: ?>
                                             <!-- Show registration button for eligible users -->
-                                            <form method="POST" action="attendee_register.php" class="d-inline">
+                                            <form method="POST" action="show_details.php" class="d-inline">
                                                 <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
                                                 <input type="hidden" name="user_name" value="<?= htmlspecialchars($user['name']) ?>">
                                                 <input type="hidden" name="user_email" value="<?= htmlspecialchars($user['email']) ?>">
+                                                <input type="hidden" name="seatsLeft" value="<?= htmlspecialchars($seatsLeft) ?>">
                                                 <button type="submit" class="btn btn-primary">Register for Event</button>
                                             </form>
                                         <?php endif; ?>
