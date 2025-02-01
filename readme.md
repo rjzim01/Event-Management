@@ -1,6 +1,6 @@
 # Event Management System
 
-A simple Event Management System built with <strong>Raw PHP</strong> and <strong>MySQL</strong>. It allows user registration, event creation, attendance tracking, and provides a JSON API for programmatic access to event details.
+A simple Event Management System built with <strong>Raw PHP</strong> and <strong>MySQL</strong>. It allows user registration, event creation, attendance registration, and provides a JSON API for programmatic access to event details.
 
 ---
 
@@ -8,7 +8,7 @@ A simple Event Management System built with <strong>Raw PHP</strong> and <strong
 <ul>
   <li>User Registration &amp; Login</li>
   <li>Role-Based Access (Admin/User)</li>
-  <li>Event Creation, Update, and Deletion (Admin Only)</li>
+  <li>Event Creation, Update, and Deletion</li>
   <li>Event Registration for Users</li>
   <li>CSV Download of Attendee Lists (Admin Only)</li>
   <li>JSON API to Fetch Event Details</li>
@@ -17,9 +17,9 @@ A simple Event Management System built with <strong>Raw PHP</strong> and <strong
 <h2>📦 Project Setup Instructions</h2>
 <ol>
   <li>Clone the repository:
-    <pre><code>git clone https://github.com/your-repo/event-management-system.git</code></pre>
+    <pre><code>git clone https://github.com/rjzim01/Event-Management</code></pre>
   </li>
-  <li>Import the <code>database.sql</code> file into your MySQL server.</li>
+  <li>Import the <code>event_management.sql</code> file into your MySQL server.</li>
   <li>Update the <code>db.php</code> file with your database credentials:
     <pre><code>define('DB_HOST', 'localhost');
 define('DB_NAME', 'event_management');
@@ -37,7 +37,7 @@ define('DB_PASS', 'your_password');</code></pre>
 
 <h2>👤 Admin Access</h2>
 <ul>
-  <li>Only users with the <code>admin</code> role can create, update, or delete events.</li>
+  <li>Only users with the <code>authenticated</code> can create, update, or delete events.</li>
   <li>Admins can download attendee lists in CSV format for each event.</li>
 </ul>
 
@@ -45,11 +45,7 @@ define('DB_PASS', 'your_password');</code></pre>
 <ul>
   <li>PHP (Raw)</li>
   <li>MySQL</li>
-  <li>HTML5 &amp; CSS3</li>
+  <li>HTML5 &amp; CSS3 &amp; Bootstrap</li>
   <li>JavaScript (Validation &amp; API Calls)</li>
 </ul>
 
----
-
-<h3>📬 Contact</h3>
-<p>For any queries, feel free to reach out via <strong>your_email@example.com</strong>.</p>
