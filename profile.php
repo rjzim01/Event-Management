@@ -20,6 +20,7 @@ $stmtUser = $pdo->prepare("SELECT name, email FROM users WHERE id = :user_id");
 $stmtUser->execute(['user_id' => $user_id]);
 $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
 $username = $user['name'];
+$useremail = $user['email'];
 
 // Handle profile update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" value="user@example.com" disabled>
+                                <input type="email" class="form-control" id="email" name="email" value="<?= htmlspecialchars($useremail); ?>" disabled>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-primary">Update Profile</button>

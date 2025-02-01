@@ -35,6 +35,10 @@ if (!in_array($sort, $allowedSortColumns)) {
 }
 
 // Fetch all events with creator's name from the database
+$search = isset($_GET['search']) ? '%' . $_GET['search'] . '%' : '%%';
+
+
+// Fetch all events with creator's name from the database
 $stmt = $pdo->prepare("
     SELECT 
     events.*,
@@ -49,19 +53,28 @@ $stmt = $pdo->prepare("
         users ON events.created_by = users.id
     LEFT JOIN 
         attendees ON events.id = attendees.event_id
+    WHERE 
+        events.name LIKE :search OR events.location LIKE :search
     GROUP BY 
         events.id
     ORDER BY 
         $sort $order
     LIMIT :limit OFFSET :offset
 ");
+$stmt->bindValue(':search', $search, PDO::PARAM_STR);
 $stmt->bindValue(':limit', $eventsPerPage, PDO::PARAM_INT);
 $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $events = $stmt->fetchAll();
 
 // Get the total number of events
-$totalEventsStmt = $pdo->query("SELECT COUNT(*) FROM events");
+$totalEventsStmt = $pdo->prepare("SELECT COUNT(*) FROM events WHERE name LIKE :search OR location LIKE :search");
+$totalEventsStmt->bindValue(':search', $search, PDO::PARAM_STR);
+$totalEventsStmt->execute();
+$totalEvents = $totalEventsStmt->fetchColumn();
+
+// Get the total number of events
+//$totalEventsStmt = $pdo->query("SELECT COUNT(*) FROM events");
 $totalEvents = $totalEventsStmt->fetchColumn();
 
 // Calculate total pages
@@ -107,16 +120,26 @@ $totalPages = ceil($totalEvents / $eventsPerPage);
 
             <div style="padding: 10px; border-radius: 5px; margin-bottom: 10px;" class="bg-light shadow-sm text-black">
                 <!-- Sorting -->
-                <form method="GET" class="d-inline-block">
-                    <label for="sort" class="me-2">Sort by:</label>
-                    <select name="sort" id="sort" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
-                        <option value="start_date" <?= $sort === 'start_date' ? 'selected' : '' ?>>Start Date</option>
-                        <option value="name" <?= $sort === 'name' ? 'selected' : '' ?>>Name</option>
-                        <option value="location" <?= $sort === 'location' ? 'selected' : '' ?>>Location</option>
-                        <option value="seats_left" <?= $sort === 'seats_left' ? 'selected' : '' ?>>Seats Left</option>
-                    </select>
-                    <input type="hidden" name="order" value="<?= $order === 'ASC' ? 'desc' : 'asc' ?>">
+                <form method="GET" class="d-flex justify-content-between">
+                    <div class="d-inline-block">
+                        <label for="sort" class="me-2">Sort by:</label>
+                        <select name="sort" id="sort" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+                            <option value="start_date" <?= $sort === 'start_date' ? 'selected' : '' ?>>Start Date</option>
+                            <option value="name" <?= $sort === 'name' ? 'selected' : '' ?>>Name</option>
+                            <option value="location" <?= $sort === 'location' ? 'selected' : '' ?>>Location</option>
+                            <option value="seats_left" <?= $sort === 'seats_left' ? 'selected' : '' ?>>Seats Left</option>
+                        </select>
+                        <input type="hidden" name="order" value="<?= $order === 'ASC' ? 'desc' : 'asc' ?>">
+                    </div>
+
+                    <!-- Search Input with Icon -->
+                    <div class="d-inline-block ms-3 position-relative">
+                        <input type="text" name="search" id="search" class="form-control ps-5" placeholder="Search events" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+                        <!-- Search Icon -->
+                        <button type="submit" class="btn btn-link position-absolute top-50 end-0 translate-middle-y pe-3" style="text-decoration: none; outline: none;">🔍</button>
+                    </div>
                 </form>
+
             </div>
 
             <!-- <hr> -->
