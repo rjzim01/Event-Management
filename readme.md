@@ -27,13 +27,9 @@ define('DB_USER', 'root');
 define('DB_PASS', 'your_password');</code></pre>
   </li>
   <li>Start your local server (e.g., XAMPP, WAMP, or MAMP) and navigate to the project folder in your browser.</li>
+  <li>Or, Start your local server using terminal command :- php -S localhost:8000</li>
   <li>Register a new user or log in with an existing account.</li>
 </ol>
-
-<h2>🔑 API Endpoint</h2>
-<ul>
-  <li><strong>GET /api/event.php?event_id=1</strong> - Fetch event details in JSON format.</li>
-</ul>
 
 <h2>👤 Admin Access</h2>
 <ul>
