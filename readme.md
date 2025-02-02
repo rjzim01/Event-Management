@@ -4,6 +4,13 @@ A simple Event Management System built with <strong>Raw PHP</strong> and <strong
 
 ---
 
+<h1>🖥️ Usage Instructions</h1>
+<ul>
+  <li>Register/Login: Create an account and log in.</li>
+  <li>Event Registration (User): Create, edit, or delete events from the dashboard for own. View events and register attendance.</li>
+  <li>Event Management (Admin): Create, edit, or delete events from the dashboard. Download CSV format data for a speciphic event.</li>
+</ul>
+
 <h2>🚀 Features</h2>
 <ul>
   <li>User Registration &amp; Login</li>
