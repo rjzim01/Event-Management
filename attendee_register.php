@@ -28,7 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $event = $hostCheckStmt->fetch();
 
     if ($event && $event['created_by'] == $user_id) {
-        echo '<script>alert("You cannot register for your own event."); window.location.href="event_view.php";</script>';
+        //echo '<script>alert("You cannot register for your own event."); window.location.href="event_view.php";</script>';
+        $_SESSION['flash_message'] = "You cannot register for your own event.";
+        header('Location: event_view.php');
         exit;
     }
 
@@ -43,7 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Check if the seat limit is reached
         if ($currentAttendees >= $seatLimit) {
-            echo '<script>alert("The seat limit for this event has been reached. Registration is closed."); window.location.href="event_view.php";</script>';
+            //echo '<script>alert("The seat limit for this event has been reached. Registration is closed."); window.location.href="event_view.php";</script>';
+            $_SESSION['flash_message'] = "The seat limit for this event has been reached. Registration is closed.";
+            header('Location: event_view.php');
             exit;
         }
     } else {
@@ -56,7 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $checkStmt->execute([$event_id, $email]);
 
     if ($checkStmt->rowCount() > 0) {
-        echo '<script>alert("You have already registered for this event."); window.location.href="event_view.php";</script>';
+        //echo '<script>alert("You have already registered for this event."); window.location.href="event_view.php";</script>';
+        $_SESSION['flash_message'] = "You have already registered for this event.";
+        header('Location: event_view.php');
         exit;
     }
 
@@ -64,9 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("INSERT INTO attendees (event_id, name, email, registered_at) VALUES (?, ?, ?, NOW())");
 
     if ($stmt->execute([$event_id, $name, $email])) {
-        echo '<script>alert("Successfully registered for the event."); window.location.href="event_view.php";</script>';
+        $_SESSION['flash_message'] = "Successfully registered for the event.";
+        header('Location: event_view.php');
+        exit;
+        // echo '<script>alert("Successfully registered for the event."); window.location.href="event_view.php";</script>';
+        // echo '<script>$_SESSION['flash_message'] = "Successfully registered for the event."; window.location.href="event_view.php";</script>';
+        // $_SESSION['flash_message'] = "Login successful";
     } else {
-        echo '<script>alert("Failed to register for the event."); window.location.href="event_view.php";</script>';
+        $_SESSION['flash_message'] = "Failed to register for the event.";
+        header('Location: event_view.php');
+        exit;
+        // echo '<script>alert("Failed to register for the event."); window.location.href="event_view.php";</script>';
     }
 } else {
     // Redirect if not a POST request
